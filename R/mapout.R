@@ -69,9 +69,15 @@ mapout <- function(x) {
 #'  parameter.
 #'
 #' @export
-predict.mapout <- function(object, sdev=3, ...) {
+predict.mapout <- function(object, sdev=3, type='sampleid', ...) {
   info <- object$information
-  rownames(object$M)[info > mean(info) + sdev*stats::sd(info)]
+  o <- rownames(object$M)[info > mean(info) + sdev*stats::sd(info)]
+  if (type =='sampleid') return (o)
+  if (type =='coef'){
+    i <- info[rownames(object$M) %in% o]
+    names(i) <- o
+    return( i )
+  }
 }
 
 #' Plot method for \code{mapout} objects

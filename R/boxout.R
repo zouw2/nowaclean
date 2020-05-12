@@ -110,7 +110,11 @@ plot.boxout<- function(x, batch=NULL, highlight=NULL, ...) {
 #'  parameter.
 #'
 #' @export
-predict.boxout <- function(object, sdev=3, ...) {
+predict.boxout <- function(object, sdev=3, type='sampleid', ...) {
   kst <- object$statistics[, "ks"]
-  rownames(object$statistics)[kst - mean(kst) > sdev*stats::sd(kst)]
+  o <- rownames(object$statistics)[kst - mean(kst) > sdev*stats::sd(kst)]
+  if (type == 'sampleid') return (o)
+  if (type == 'coef') {
+    object$statistics[o, "ks"]
+  }
 }

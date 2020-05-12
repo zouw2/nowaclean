@@ -102,7 +102,14 @@ plot.prcout <- function(x, batch=NULL, highlight=NULL, ...) {
 #'  parameter.
 #'
 #' @export
-predict.prcout <- function(object, sdev=3, ...) {
-  rownames(object$prc$x)[object$mahalanobis > sdev*object$sd]
+#' 
+predict.prcout <- function(object, sdev=3, type='sampleid',...) {
+  
+  o <- rownames(object$prc$x)[object$mahalanobis > sdev*object$sd]
+  if(type == 'sampleid') return(o)
+  if(type == 'coef') {
+    stopifnot(all( o %in% names(prc_all$mahalanobis)))
+    return(prc_all$mahalanobis[o]/object$sd)
+  }
 }
 
